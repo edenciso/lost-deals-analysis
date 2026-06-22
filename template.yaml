@@ -1,0 +1,408 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  ValueOS - AI Agentic Workflow for Lost Deals Revenue Analysis.
+  Serverless Deployment using AWS SAM + Bedrock & Claude Sonnet 4.5
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 900
+    MemorySize: 1024
+    Environment:
+      Variables:
+        DEALS_TABLE: !Ref DealsTable
+        ANALYSES_TABLE: !Ref AnalysesTable
+        REPORTS_TABLE: !Ref ReportsTable
+        REPORTS_BUCKET: !Ref ReportsBucket
+        BEDROCK_MODEL_ID: "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+        BEDROCK_REGION: !Ref AWS::Region
+        LOG_LEVEL: "INFO"
+
+Parameters:
+  Stage:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, staging, prod]
+  CognitoDomain:
+    Type: String
+    Default: lostbot-auth
+    Description: Cognito hosted UI domain prefix
+
+Resources:
+  # ============================================
+  # Cognito Authentication
+  # ============================================
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Sub "lostbot-users-${Stage}"
+      AutoVerifiedAttributes: [email]
+      UsernameAttributes: [email]
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 12
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+      Schema:
+        - Name: company
+          AttributeDataType: String
+          Mutable: true
+        - Name: role
+          AttributeDataType: String
+          Mutable: true
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      ClientName: !Sub "lostbot-client-${Stage}"
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      AccessTokenValidity: 1
+      IdTokenValidity: 1
+      RefreshTokenValidity: 30
+
+  # ============================================
+  # API Gateway
+  # ============================================
+  LostbotApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub "lostbot-api-${Stage}"
+      StageName: !Ref Stage
+      Auth:
+        DefaultAuthorizer: CognitoAuthorizer
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: !GetAtt UserPool.Arn
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization'"
+        AllowOrigin: "'*'"
+      Models:
+        DealInput:
+          type: object
+          required: [deals]
+          properties:
+            deals:
+              type: array
+              items:
+                type: object
+
+  # ============================================
+  # Lambda Functions
+  # ============================================
+  IngestDealsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "lostbot-ingest-deals-${Stage}"
+      Handler: handlers.ingest_deals.handler
+      CodeUri: src/
+      Description: Ingest closed/lost deals JSON data into DynamoDB
+      Events:
+        IngestDeals:
+          Type: Api
+          Properties:
+            RestApiId: !Ref LostbotApi
+            Path: /deals/ingest
+            Method: POST
+        IngestBatch:
+          Type: Api
+          Properties:
+            RestApiId: !Ref LostbotApi
+            Path: /deals/ingest/batch
+            Method: POST
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DealsTable
+        - S3CrudPolicy:
+            BucketName: !Ref ReportsBucket
+
+  AnalyzeDealsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "lostbot-analyze-deals-${Stage}"
+      Handler: handlers.analyze_deals.handler
+      CodeUri: src/
+      Timeout: 900
+      MemorySize: 2048
+      Description: Multi-agent orchestration for deal loss analysis via Bedrock
+      Environment:
+        Variables:
+          DEALS_TABLE: !Ref DealsTable
+          ANALYSES_TABLE: !Ref AnalysesTable
+          REPORTS_TABLE: !Ref ReportsTable
+          REPORTS_BUCKET: !Ref ReportsBucket
+          BEDROCK_MODEL_ID: "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+          BEDROCK_REGION: !Ref AWS::Region
+          LOG_LEVEL: "INFO"
+          WORKER_FUNCTION: !Sub "lostbot-analyze-deals-${Stage}"
+      Events:
+        AnalyzeSingle:
+          Type: Api
+          Properties:
+            RestApiId: !Ref LostbotApi
+            Path: /analyze/deal/{deal_id}
+            Method: POST
+        AnalyzeBatch:
+          Type: Api
+          Properties:
+            RestApiId: !Ref LostbotApi
+            Path: /analyze/batch
+            Method: POST
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DealsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AnalysesTable
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+                - bedrock:InvokeModelWithResponseStream
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - lambda:InvokeFunction
+              Resource: !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:lostbot-analyze-deals-${Stage}"
+
+  GenerateReportFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "lostbot-generate-report-${Stage}"
+      Handler: handlers.generate_report.handler
+      CodeUri: src/
+      Timeout: 900
+      MemorySize: 2048
+      Description: Generate comprehensive Lostbot analysis report
+      Environment:
+        Variables:
+          DEALS_TABLE: !Ref DealsTable
+          ANALYSES_TABLE: !Ref AnalysesTable
+          REPORTS_TABLE: !Ref ReportsTable
+          REPORTS_BUCKET: !Ref ReportsBucket
+          BEDROCK_MODEL_ID: "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+          BEDROCK_REGION: !Ref AWS::Region
+          LOG_LEVEL: "INFO"
+          WORKER_FUNCTION: !Sub "lostbot-generate-report-${Stage}"
+      Events:
+        GenerateReport:
+          Type: Api
+          Properties:
+            RestApiId: !Ref LostbotApi
+            Path: /reports/generate
+            Method: POST
+        GetReport:
+          Type: Api
+          Properties:
+            RestApiId: !Ref LostbotApi
+            Path: /reports/{report_id}
+            Method: GET
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AnalysesTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ReportsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DealsTable
+        - S3CrudPolicy:
+            BucketName: !Ref ReportsBucket
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+                - bedrock:InvokeModelWithResponseStream
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - lambda:InvokeFunction
+              Resource: !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:lostbot-generate-report-${Stage}"
+
+  GTMBugsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "lostbot-gtm-bugs-${Stage}"
+      Handler: handlers.gtm_bugs.handler
+      CodeUri: src/
+      Timeout: 900
+      MemorySize: 2048
+      Description: Identify GTM bugs and generate fix playbooks
+      Events:
+        IdentifyBugs:
+          Type: Api
+          Properties:
+            RestApiId: !Ref LostbotApi
+            Path: /gtm/bugs
+            Method: POST
+        GetPlaybook:
+          Type: Api
+          Properties:
+            RestApiId: !Ref LostbotApi
+            Path: /gtm/playbook/{bug_id}
+            Method: GET
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AnalysesTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ReportsTable
+        - DynamoDBReadPolicy:
+            TableName: !Ref DealsTable
+        - S3CrudPolicy:
+            BucketName: !Ref ReportsBucket
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+                - bedrock:InvokeModelWithResponseStream
+              Resource: "*"
+
+  StatusFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "lostbot-status-${Stage}"
+      Handler: handlers.status.handler
+      CodeUri: src/
+      Timeout: 30
+      MemorySize: 256
+      Description: Get analysis status and health check
+      Events:
+        HealthCheck:
+          Type: Api
+          Properties:
+            RestApiId: !Ref LostbotApi
+            Path: /health
+            Method: GET
+            Auth:
+              Authorizer: NONE
+        AnalysisStatus:
+          Type: Api
+          Properties:
+            RestApiId: !Ref LostbotApi
+            Path: /status/{session_id}
+            Method: GET
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref DealsTable
+        - DynamoDBReadPolicy:
+            TableName: !Ref AnalysesTable
+        - DynamoDBReadPolicy:
+            TableName: !Ref ReportsTable
+
+  # ============================================
+  # DynamoDB Tables
+  # ============================================
+  DealsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "lostbot-deals-${Stage}"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: session_id
+          AttributeType: S
+        - AttributeName: deal_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: session_id
+          KeyType: HASH
+        - AttributeName: deal_id
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: deal-lookup
+          KeySchema:
+            - AttributeName: deal_id
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+
+  AnalysesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "lostbot-analyses-${Stage}"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: session_id
+          AttributeType: S
+        - AttributeName: analysis_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: session_id
+          KeyType: HASH
+        - AttributeName: analysis_id
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: analysis-lookup
+          KeySchema:
+            - AttributeName: analysis_id
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+
+  ReportsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "lostbot-reports-${Stage}"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: session_id
+          AttributeType: S
+        - AttributeName: report_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: session_id
+          KeyType: HASH
+        - AttributeName: report_id
+          KeyType: RANGE
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+
+  # ============================================
+  # S3 Bucket for Reports
+  # ============================================
+  ReportsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "lostbot-reports-${Stage}-${AWS::AccountId}"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - Id: ExpireOldReports
+            Status: Enabled
+            ExpirationInDays: 90
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+Outputs:
+  ApiUrl:
+    Description: Lostbot API Gateway URL
+    Value: !Sub "https://${LostbotApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}"
+  UserPoolId:
+    Description: Cognito User Pool ID
+    Value: !Ref UserPool
+  UserPoolClientId:
+    Description: Cognito User Pool Client ID
+    Value: !Ref UserPoolClient
+  ReportsBucketName:
+    Description: S3 bucket for generated reports
+    Value: !Ref ReportsBucket
+  DealsTableName:
+    Description: DynamoDB Deals table
+    Value: !Ref DealsTable
+  AnalysesTableName:
+    Description: DynamoDB Analyses table
+    Value: !Ref AnalysesTable

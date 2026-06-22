@@ -1,0 +1,489 @@
+{
+  "session_id": "demo-session-001",
+  "company_name": "Acme SaaS Corp",
+  "analyst_name": "FDE Demo",
+  "industry": "B2B SaaS",
+  "avg_deal_cycle_days": 45,
+  "deals": [
+    {
+      "deal_id": "DEAL-001",
+      "company": "TechNova Solutions",
+      "arr_value": 48000,
+      "stage": "closedlost",
+      "close_date": "2025-12-15",
+      "days_in_cycle": 62,
+      "ae_name": "Sarah Chen",
+      "ae_stated_reason": "Price too high",
+      "competitor": "CompetitorX",
+      "deal_size_bucket": "mid_market",
+      "product_evaluated": "Enterprise Plan",
+      "discount_offered": 15,
+      "contacts": [
+        {"name": "James Park", "title": "VP Engineering", "role": "technical_buyer", "engagement_level": "high"},
+        {"name": "Lisa Wong", "title": "Director of DevOps", "role": "champion", "engagement_level": "high"}
+      ],
+      "call_transcripts": [
+        {
+          "date": "2025-10-20",
+          "duration_minutes": 45,
+          "attendees": ["Sarah Chen", "James Park", "Lisa Wong"],
+          "summary": "Discovery call. James and Lisa are excited about the platform. They have 12 engineering teams and need better observability. Lisa mentioned they're evaluating CompetitorX as well. Budget discussion was deferred - Lisa said 'let's focus on the technical fit first.' No CFO or VP Finance mentioned.",
+          "call_type": "discovery"
+        },
+        {
+          "date": "2025-11-05",
+          "duration_minutes": 60,
+          "attendees": ["Sarah Chen", "James Park", "Lisa Wong", "3 engineers"],
+          "summary": "Technical demo. Team loved the real-time analytics dashboard. Engineers asked about API rate limits and custom integrations. Lisa asked if we could do a POC. James said 'this looks great but I need to check with Mark (CFO) on budget timing.' Sarah did not follow up on the CFO introduction.",
+          "call_type": "demo"
+        },
+        {
+          "date": "2025-12-01",
+          "duration_minutes": 30,
+          "attendees": ["Sarah Chen", "Lisa Wong"],
+          "summary": "Lisa called to say they're going with CompetitorX. 'Your product is better but their price point was significantly lower and Mark felt we couldn't justify the premium without a clear ROI case.' Sarah offered a 15% discount but Lisa said 'it's too late, the decision has been made at the exec level.'",
+          "call_type": "negotiation"
+        }
+      ],
+      "email_threads": [
+        {
+          "subject": "Follow-up: TechNova + Acme Partnership",
+          "date_range": "2025-10-21 to 2025-12-10",
+          "summary": "16 emails exchanged. All with Lisa and James. No executive stakeholders ever included. Sarah sent a pricing proposal on Nov 15 but it was a standard template with no ROI analysis or business case.",
+          "participants": ["Sarah Chen", "James Park", "Lisa Wong"]
+        }
+      ],
+      "notes": "Sarah's CRM note: 'Lost on price. CompetitorX was 40% cheaper. Need to revisit pricing strategy.'"
+    },
+    {
+      "deal_id": "DEAL-002",
+      "company": "DataStream Analytics",
+      "arr_value": 72000,
+      "stage": "closedlost",
+      "close_date": "2025-11-30",
+      "days_in_cycle": 95,
+      "ae_name": "Mike Johnson",
+      "ae_stated_reason": "No budget this quarter",
+      "competitor": "",
+      "deal_size_bucket": "mid_market",
+      "product_evaluated": "Enterprise Plan",
+      "discount_offered": 0,
+      "contacts": [
+        {"name": "Rachel Kim", "title": "Head of Data Engineering", "role": "champion", "engagement_level": "medium"}
+      ],
+      "call_transcripts": [
+        {
+          "date": "2025-09-01",
+          "duration_minutes": 30,
+          "attendees": ["Mike Johnson", "Rachel Kim"],
+          "summary": "Discovery call. Rachel is excited about the data pipeline features. She mentioned her team spends 20+ hours/week on manual data reconciliation. No discussion of budget, timeline, or decision process. Mike did not ask about other stakeholders.",
+          "call_type": "discovery"
+        },
+        {
+          "date": "2025-09-20",
+          "duration_minutes": 45,
+          "attendees": ["Mike Johnson", "Rachel Kim"],
+          "summary": "Demo focused on technical capabilities. Rachel said 'this would save us so much time.' Mike asked her to 'champion this internally.' No mutual action plan or next steps defined beyond 'I'll talk to my boss.'",
+          "call_type": "demo"
+        },
+        {
+          "date": "2025-11-15",
+          "duration_minutes": 15,
+          "attendees": ["Mike Johnson", "Rachel Kim"],
+          "summary": "Rachel apologized and said the initiative was deprioritized. 'My VP said we don't have budget this quarter and we need to focus on the migration project.' Mike said he'd check back in Q2.",
+          "call_type": "follow_up"
+        }
+      ],
+      "email_threads": [
+        {
+          "subject": "DataStream + Acme: Next Steps?",
+          "date_range": "2025-09-25 to 2025-11-15",
+          "summary": "8 emails. Mike followed up 4 times asking 'any update on internal alignment?' Rachel responded with delays each time. No escalation attempted. No additional stakeholders engaged.",
+          "participants": ["Mike Johnson", "Rachel Kim"]
+        }
+      ],
+      "notes": "Mike's CRM note: 'Budget pushed to Q2 2026. Will follow up in April.' 95-day cycle with only 3 calls and 1 contact engaged."
+    },
+    {
+      "deal_id": "DEAL-003",
+      "company": "CloudFirst Inc",
+      "arr_value": 120000,
+      "stage": "closedlost",
+      "close_date": "2026-01-10",
+      "days_in_cycle": 38,
+      "ae_name": "Sarah Chen",
+      "ae_stated_reason": "Went with incumbent vendor",
+      "competitor": "LegacyCorp",
+      "deal_size_bucket": "enterprise",
+      "product_evaluated": "Enterprise Plan",
+      "discount_offered": 20,
+      "contacts": [
+        {"name": "Tom Martinez", "title": "CTO", "role": "economic_buyer", "engagement_level": "low"},
+        {"name": "Priya Patel", "title": "VP Engineering", "role": "technical_buyer", "engagement_level": "high"},
+        {"name": "David Lee", "title": "Senior Architect", "role": "influencer", "engagement_level": "high"}
+      ],
+      "call_transcripts": [
+        {
+          "date": "2025-12-05",
+          "duration_minutes": 60,
+          "attendees": ["Sarah Chen", "Priya Patel", "David Lee"],
+          "summary": "Strong discovery. Priya and David detailed pain points with LegacyCorp: slow support, outdated UI, missing real-time features. David said 'we need real-time event processing - LegacyCorp can't do this.' Priya mentioned Tom (CTO) would need to approve but 'he trusts our recommendation.'",
+          "call_type": "discovery"
+        },
+        {
+          "date": "2025-12-18",
+          "duration_minutes": 90,
+          "attendees": ["Sarah Chen", "Priya Patel", "David Lee", "4 engineers"],
+          "summary": "Full technical deep dive. Team was impressed. David asked about real-time event processing capability. Sarah said 'it's on our roadmap for Q2.' David's face fell - 'that's actually our #1 requirement. We assumed you had this already based on your marketing.' Priya said they'd discuss internally.",
+          "call_type": "technical_review"
+        },
+        {
+          "date": "2026-01-08",
+          "duration_minutes": 20,
+          "attendees": ["Sarah Chen", "Priya Patel"],
+          "summary": "Priya informed Sarah they're staying with LegacyCorp. 'Tom said without real-time event processing, the migration risk isn't justified. LegacyCorp promised to deliver an updated UI in Q2.' Sarah offered 20% discount. Priya said 'it's not about price, it's about the feature gap.'",
+          "call_type": "follow_up"
+        }
+      ],
+      "email_threads": [
+        {
+          "subject": "CloudFirst Technical Evaluation: Acme Platform",
+          "date_range": "2025-12-06 to 2026-01-10",
+          "summary": "22 emails. Deep technical discussions with David and Priya. Tom (CTO) was CC'd on 2 emails but never responded. Sarah never had a direct conversation with Tom.",
+          "participants": ["Sarah Chen", "Priya Patel", "David Lee", "Tom Martinez (CC only)"]
+        }
+      ],
+      "notes": "Highest value deal lost this quarter. Real-time event processing is a critical gap."
+    },
+    {
+      "deal_id": "DEAL-004",
+      "company": "ScaleUp Partners",
+      "arr_value": 36000,
+      "stage": "closedlost",
+      "close_date": "2025-12-20",
+      "days_in_cycle": 110,
+      "ae_name": "Mike Johnson",
+      "ae_stated_reason": "Prospect went dark",
+      "competitor": "",
+      "deal_size_bucket": "smb",
+      "product_evaluated": "Growth Plan",
+      "discount_offered": 0,
+      "contacts": [
+        {"name": "Amy Rodriguez", "title": "Head of Operations", "role": "champion", "engagement_level": "low"}
+      ],
+      "call_transcripts": [
+        {
+          "date": "2025-09-05",
+          "duration_minutes": 30,
+          "attendees": ["Mike Johnson", "Amy Rodriguez"],
+          "summary": "Inbound lead. Amy saw a webinar and was interested. She manages a team of 15 and needs workflow automation. Quick discovery but Mike didn't ask about decision process, budget, or timeline. Amy said 'this looks interesting, send me pricing.'",
+          "call_type": "discovery"
+        },
+        {
+          "date": "2025-09-25",
+          "duration_minutes": 40,
+          "attendees": ["Mike Johnson", "Amy Rodriguez"],
+          "summary": "Demo. Amy liked what she saw but seemed hesitant. 'I need to figure out if this is something we can prioritize right now.' No mutual action plan set. Mike said 'take your time and let me know.'",
+          "call_type": "demo"
+        }
+      ],
+      "email_threads": [
+        {
+          "subject": "Acme for ScaleUp - Ready When You Are!",
+          "date_range": "2025-09-26 to 2025-12-15",
+          "summary": "12 follow-up emails from Mike with increasingly casual subject lines ('Just checking in!', 'Circling back', 'Happy Holidays from Acme!'). Amy responded twice with vague 'thanks, will review' messages. No value reinforcement or urgency creation in any email.",
+          "participants": ["Mike Johnson", "Amy Rodriguez"]
+        }
+      ],
+      "notes": "Mike's note: 'Prospect stopped responding. Marking as closed-lost.' 110 days, 2 calls, 12 unanswered follow-ups."
+    },
+    {
+      "deal_id": "DEAL-005",
+      "company": "FinTech Dynamics",
+      "arr_value": 96000,
+      "stage": "closedlost",
+      "close_date": "2026-01-05",
+      "days_in_cycle": 55,
+      "ae_name": "Sarah Chen",
+      "ae_stated_reason": "Compliance requirements not met",
+      "competitor": "SecureVendor",
+      "deal_size_bucket": "enterprise",
+      "product_evaluated": "Enterprise Plan",
+      "discount_offered": 10,
+      "contacts": [
+        {"name": "Robert Chen", "title": "CISO", "role": "blocker", "engagement_level": "medium"},
+        {"name": "Maria Santos", "title": "VP Product", "role": "champion", "engagement_level": "high"},
+        {"name": "Kevin White", "title": "Head of Engineering", "role": "technical_buyer", "engagement_level": "high"}
+      ],
+      "call_transcripts": [
+        {
+          "date": "2025-11-10",
+          "duration_minutes": 45,
+          "attendees": ["Sarah Chen", "Maria Santos", "Kevin White"],
+          "summary": "Strong discovery. Maria and Kevin have a clear use case: AI-powered document processing for regulatory filings. Kevin asked about SOC 2 compliance - Sarah said 'we're SOC 2 Type II certified.' Maria mentioned Robert (CISO) would need to sign off.",
+          "call_type": "discovery"
+        },
+        {
+          "date": "2025-11-25",
+          "duration_minutes": 60,
+          "attendees": ["Sarah Chen", "Maria Santos", "Kevin White", "Robert Chen"],
+          "summary": "Technical/security review. Robert asked detailed questions about data residency, encryption at rest, and GDPR compliance for EU data processing. Sarah struggled to answer specifics about data residency options. Robert said 'we need all customer data to stay within EU boundaries - is that guaranteed?' Sarah said she'd check with engineering.",
+          "call_type": "technical_review"
+        },
+        {
+          "date": "2025-12-15",
+          "duration_minutes": 30,
+          "attendees": ["Sarah Chen", "Maria Santos"],
+          "summary": "Maria said Robert blocked the deal. 'He said without guaranteed EU data residency and the specific GDPR documentation he requested, he can't approve. SecureVendor has all of this out of the box.' Sarah offered 10% discount. Maria: 'This isn't a pricing issue, it's a compliance blocker.'",
+          "call_type": "follow_up"
+        }
+      ],
+      "email_threads": [
+        {
+          "subject": "FinTech Dynamics Security Questionnaire",
+          "date_range": "2025-11-26 to 2025-12-20",
+          "summary": "Robert sent a 45-page security questionnaire on Nov 26. Sarah's team took 2 weeks to return it with 8 items marked 'planned for future release.' Robert flagged 3 of those 8 as mandatory requirements. No escalation to Acme's security team for direct CISO-to-CISO discussion.",
+          "participants": ["Sarah Chen", "Robert Chen", "Maria Santos"]
+        }
+      ],
+      "notes": "Second enterprise deal lost due to compliance gaps. EU data residency keeps coming up."
+    },
+    {
+      "deal_id": "DEAL-006",
+      "company": "GrowthEngine Labs",
+      "arr_value": 24000,
+      "stage": "closedwon",
+      "close_date": "2025-11-20",
+      "days_in_cycle": 28,
+      "ae_name": "Sarah Chen",
+      "ae_stated_reason": "N/A - Won",
+      "competitor": "CompetitorX",
+      "deal_size_bucket": "smb",
+      "product_evaluated": "Growth Plan",
+      "discount_offered": 0,
+      "contacts": [
+        {"name": "Jessica Huang", "title": "CEO", "role": "economic_buyer", "engagement_level": "high"},
+        {"name": "Alex Turner", "title": "Head of Engineering", "role": "technical_buyer", "engagement_level": "high"}
+      ],
+      "call_transcripts": [
+        {
+          "date": "2025-10-25",
+          "duration_minutes": 45,
+          "attendees": ["Sarah Chen", "Jessica Huang", "Alex Turner"],
+          "summary": "Discovery with CEO present from day 1. Sarah asked about business impact: 'What does solving this problem mean for GrowthEngine in the next 12 months?' Jessica: 'We estimate $200K in saved engineering time.' Sarah immediately tied the product value to this ROI. Also asked about decision process and timeline upfront.",
+          "call_type": "discovery"
+        },
+        {
+          "date": "2025-11-05",
+          "duration_minutes": 60,
+          "attendees": ["Sarah Chen", "Jessica Huang", "Alex Turner"],
+          "summary": "Demo with custom ROI slide showing $200K value vs $24K investment. Alex validated technical fit. Jessica said 'the ROI is clear.' Sarah proposed a mutual action plan with go-live date. Also addressed CompetitorX: showed feature comparison and customer references from similar companies.",
+          "call_type": "demo"
+        }
+      ],
+      "email_threads": [
+        {
+          "subject": "GrowthEngine + Acme: Mutual Action Plan",
+          "date_range": "2025-11-06 to 2025-11-20",
+          "summary": "Clean process. Sarah sent mutual action plan with milestones. Contract reviewed by Day 10. Signed by Day 15. Jessica sent a referral introduction on Day 16.",
+          "participants": ["Sarah Chen", "Jessica Huang", "Alex Turner"]
+        }
+      ],
+      "notes": "Sarah's best deal this quarter. CEO engaged from day 1. Strong ROI case. 28-day cycle. Won against CompetitorX on value, not price."
+    },
+    {
+      "deal_id": "DEAL-007",
+      "company": "MedTech Innovations",
+      "arr_value": 84000,
+      "stage": "closedlost",
+      "close_date": "2026-01-15",
+      "days_in_cycle": 75,
+      "ae_name": "Mike Johnson",
+      "ae_stated_reason": "Timing - org restructuring",
+      "competitor": "",
+      "deal_size_bucket": "mid_market",
+      "product_evaluated": "Enterprise Plan",
+      "discount_offered": 5,
+      "contacts": [
+        {"name": "Dr. Susan Park", "title": "Director of R&D", "role": "champion", "engagement_level": "medium"},
+        {"name": "Greg Thompson", "title": "IT Director", "role": "technical_buyer", "engagement_level": "low"}
+      ],
+      "call_transcripts": [
+        {
+          "date": "2025-11-01",
+          "duration_minutes": 40,
+          "attendees": ["Mike Johnson", "Dr. Susan Park"],
+          "summary": "Discovery. Susan needs ML pipeline management for clinical data analysis. She's been doing this manually and it takes her team 30 hours/week. Mike did good discovery on pain but didn't ask about budget authority, org structure, or IT involvement.",
+          "call_type": "discovery"
+        },
+        {
+          "date": "2025-11-20",
+          "duration_minutes": 50,
+          "attendees": ["Mike Johnson", "Dr. Susan Park", "Greg Thompson"],
+          "summary": "Demo + IT review. Greg raised HIPAA compliance concerns. Mike said 'we're working on HIPAA - should be ready soon.' Greg: 'That's a hard requirement for us, not a nice-to-have.' Susan tried to defend the deal but Greg was firm. Mike didn't bring in Acme's compliance team.",
+          "call_type": "demo"
+        },
+        {
+          "date": "2026-01-10",
+          "duration_minutes": 15,
+          "attendees": ["Mike Johnson", "Dr. Susan Park"],
+          "summary": "Susan called to say the initiative was shelved. 'With the reorg and Greg's compliance concerns, leadership decided to table this for now.' Mike offered 5% discount. Susan: 'It's not about cost. We need HIPAA compliance sorted out first.'",
+          "call_type": "follow_up"
+        }
+      ],
+      "email_threads": [
+        {
+          "subject": "MedTech + Acme: Clinical Data Pipeline",
+          "date_range": "2025-11-02 to 2026-01-12",
+          "summary": "10 emails. All with Susan. Greg was included once. No escalation to leadership or compliance team. Mike sent one generic case study that wasn't healthcare-specific.",
+          "participants": ["Mike Johnson", "Dr. Susan Park", "Greg Thompson"]
+        }
+      ],
+      "notes": "Another compliance-related loss. HIPAA keeps surfacing as a blocker."
+    },
+    {
+      "deal_id": "DEAL-008",
+      "company": "RetailEdge Solutions",
+      "arr_value": 42000,
+      "stage": "closedlost",
+      "close_date": "2025-12-28",
+      "days_in_cycle": 45,
+      "ae_name": "Sarah Chen",
+      "ae_stated_reason": "Price too high",
+      "competitor": "BudgetTool",
+      "deal_size_bucket": "smb",
+      "product_evaluated": "Growth Plan",
+      "discount_offered": 25,
+      "contacts": [
+        {"name": "Karen Mitchell", "title": "COO", "role": "economic_buyer", "engagement_level": "medium"},
+        {"name": "Brian Foster", "title": "Tech Lead", "role": "technical_buyer", "engagement_level": "high"}
+      ],
+      "call_transcripts": [
+        {
+          "date": "2025-11-15",
+          "duration_minutes": 40,
+          "attendees": ["Sarah Chen", "Karen Mitchell", "Brian Foster"],
+          "summary": "Discovery. Karen is cost-conscious: 'We need to see clear ROI before committing to any tool.' Brian validated the technical need. Sarah showed the platform but didn't prepare an ROI analysis or business case for Karen. Karen asked 'what's the payback period?' Sarah said she'd follow up.",
+          "call_type": "discovery"
+        },
+        {
+          "date": "2025-12-05",
+          "duration_minutes": 45,
+          "attendees": ["Sarah Chen", "Brian Foster"],
+          "summary": "Technical deep-dive with Brian only. Karen was not invited. Brian loved the product. Sarah mentioned BudgetTool comparison but didn't have a competitive battle card. Brian: 'Karen is comparing us to BudgetTool which is half the price. You need to help me justify the premium.'",
+          "call_type": "demo"
+        },
+        {
+          "date": "2025-12-22",
+          "duration_minutes": 20,
+          "attendees": ["Sarah Chen", "Karen Mitchell"],
+          "summary": "Karen said they're going with BudgetTool. Sarah offered 25% discount. Karen: 'Even with the discount, I can't justify 2x the price without a clear business case showing the ROI. BudgetTool covers 80% of what we need at half the cost.' Sarah didn't have ROI numbers ready.",
+          "call_type": "negotiation"
+        }
+      ],
+      "email_threads": [
+        {
+          "subject": "RetailEdge Proposal - Updated Pricing",
+          "date_range": "2025-11-16 to 2025-12-28",
+          "summary": "Sarah sent standard pricing proposal. Karen replied asking for ROI analysis. Sarah sent a generic case study 2 weeks later. Karen said 'this doesn't address our specific situation.' No customized business case was ever created.",
+          "participants": ["Sarah Chen", "Karen Mitchell", "Brian Foster"]
+        }
+      ],
+      "notes": "Sarah offered 25% discount immediately instead of building value. Same pattern as DEAL-001."
+    },
+    {
+      "deal_id": "DEAL-009",
+      "company": "LogiTech Freight",
+      "arr_value": 55000,
+      "stage": "closedwon",
+      "close_date": "2026-01-20",
+      "days_in_cycle": 35,
+      "ae_name": "Mike Johnson",
+      "ae_stated_reason": "N/A - Won",
+      "competitor": "CompetitorX",
+      "deal_size_bucket": "mid_market",
+      "product_evaluated": "Enterprise Plan",
+      "discount_offered": 0,
+      "contacts": [
+        {"name": "Carlos Mendez", "title": "CFO", "role": "economic_buyer", "engagement_level": "high"},
+        {"name": "Nina Petrov", "title": "CTO", "role": "technical_buyer", "engagement_level": "high"},
+        {"name": "Jake Wilson", "title": "Engineering Manager", "role": "influencer", "engagement_level": "medium"}
+      ],
+      "call_transcripts": [
+        {
+          "date": "2025-12-15",
+          "duration_minutes": 50,
+          "attendees": ["Mike Johnson", "Carlos Mendez", "Nina Petrov"],
+          "summary": "Multi-threaded discovery with both CFO and CTO. Mike asked Carlos: 'What would this investment need to deliver in the first 6 months to be considered successful?' Carlos: '$200K in efficiency gains.' Mike documented this as the success metric and built the entire pitch around it.",
+          "call_type": "discovery"
+        },
+        {
+          "date": "2025-12-28",
+          "duration_minutes": 75,
+          "attendees": ["Mike Johnson", "Carlos Mendez", "Nina Petrov", "Jake Wilson"],
+          "summary": "Demo with custom ROI dashboard showing projected $200K+ savings. Nina validated technical approach. Carlos was impressed with the data-driven pitch. Mike presented mutual close plan and addressed CompetitorX proactively with specific differentiation on reliability and support.",
+          "call_type": "demo"
+        }
+      ],
+      "email_threads": [
+        {
+          "subject": "LogiTech + Acme: Mutual Close Plan",
+          "date_range": "2025-12-29 to 2026-01-20",
+          "summary": "Clean execution. Mutual action plan shared. Legal review completed in 5 days. CFO signed off based on ROI case. Zero discount needed.",
+          "participants": ["Mike Johnson", "Carlos Mendez", "Nina Petrov"]
+        }
+      ],
+      "notes": "Mike's best deal. Multi-threaded from day 1. CFO engaged early. Strong ROI case. Won against CompetitorX on value."
+    },
+    {
+      "deal_id": "DEAL-010",
+      "company": "EduPlatform Global",
+      "arr_value": 65000,
+      "stage": "closedlost",
+      "close_date": "2026-01-25",
+      "days_in_cycle": 88,
+      "ae_name": "Mike Johnson",
+      "ae_stated_reason": "No decision made",
+      "competitor": "",
+      "deal_size_bucket": "mid_market",
+      "product_evaluated": "Enterprise Plan",
+      "discount_offered": 10,
+      "contacts": [
+        {"name": "Emily Zhang", "title": "VP Product", "role": "champion", "engagement_level": "medium"},
+        {"name": "Mark Stevens", "title": "CEO", "role": "economic_buyer", "engagement_level": "low"}
+      ],
+      "call_transcripts": [
+        {
+          "date": "2025-10-30",
+          "duration_minutes": 35,
+          "attendees": ["Mike Johnson", "Emily Zhang"],
+          "summary": "Discovery. Emily sees value but is cautious. Mike asked good questions about pain but didn't establish urgency: 'What happens if you DON'T solve this in the next 90 days?' Emily: 'Honestly, we'll keep doing what we're doing. It's painful but not critical.' Mike didn't challenge this or quantify the cost of inaction.",
+          "call_type": "discovery"
+        },
+        {
+          "date": "2025-11-15",
+          "duration_minutes": 50,
+          "attendees": ["Mike Johnson", "Emily Zhang"],
+          "summary": "Demo. Emily liked the product. Mike asked about next steps. Emily: 'I'll bring this to Mark (CEO) in our next planning session.' Mike: 'Great, when is that?' Emily: 'Probably January.' Mike accepted this timeline without creating urgency.",
+          "call_type": "demo"
+        },
+        {
+          "date": "2026-01-20",
+          "duration_minutes": 20,
+          "attendees": ["Mike Johnson", "Emily Zhang"],
+          "summary": "Emily said the planning session happened but 'AI tooling wasn't prioritized for Q1. Mark wants to revisit in Q2.' Mike offered 10% discount for Q1 commitment. Emily: 'It's not about price, we just have other priorities right now.'",
+          "call_type": "follow_up"
+        }
+      ],
+      "email_threads": [
+        {
+          "subject": "EduPlatform + Acme: Following Up",
+          "date_range": "2025-11-16 to 2026-01-22",
+          "summary": "9 emails. Mike sent periodic check-ins. No value reinforcement, no new information shared, no attempt to engage Mark directly. Emily's responses became increasingly brief.",
+          "participants": ["Mike Johnson", "Emily Zhang"]
+        }
+      ],
+      "notes": "88-day cycle, no decision. Mike never spoke with the CEO. Never created urgency or cost-of-inaction analysis."
+    }
+  ]
+}

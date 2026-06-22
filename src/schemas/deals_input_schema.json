@@ -1,0 +1,195 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LostbotDealsInput",
+  "description": "Schema for closed/lost deals data input for Lostbot analysis",
+  "type": "object",
+  "required": ["session_id", "company_name", "deals"],
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "description": "Unique session identifier for this analysis run"
+    },
+    "company_name": {
+      "type": "string",
+      "description": "Client company name"
+    },
+    "analyst_name": {
+      "type": "string",
+      "description": "FDE or analyst running the session"
+    },
+    "industry": {
+      "type": "string",
+      "description": "Client industry vertical"
+    },
+    "avg_deal_cycle_days": {
+      "type": "number",
+      "description": "Company average sales cycle in days"
+    },
+    "deals": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "items": {
+        "$ref": "#/definitions/Deal"
+      }
+    }
+  },
+  "definitions": {
+    "Deal": {
+      "type": "object",
+      "required": ["deal_id", "company", "arr_value", "stage", "ae_stated_reason"],
+      "properties": {
+        "deal_id": {
+          "type": "string",
+          "description": "CRM deal identifier"
+        },
+        "company": {
+          "type": "string",
+          "description": "Prospect company name"
+        },
+        "arr_value": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Annual recurring revenue value in USD"
+        },
+        "stage": {
+          "type": "string",
+          "enum": ["closedlost", "closedwon"],
+          "description": "Deal outcome stage"
+        },
+        "close_date": {
+          "type": "string",
+          "format": "date",
+          "description": "Date deal was closed (YYYY-MM-DD)"
+        },
+        "days_in_cycle": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total days from creation to close"
+        },
+        "ae_name": {
+          "type": "string",
+          "description": "Account executive who owned the deal"
+        },
+        "ae_stated_reason": {
+          "type": "string",
+          "description": "Loss reason as stated by the AE in CRM"
+        },
+        "competitor": {
+          "type": "string",
+          "description": "Competitor who won the deal (if known)"
+        },
+        "deal_size_bucket": {
+          "type": "string",
+          "enum": ["smb", "mid_market", "enterprise"],
+          "description": "Deal size classification"
+        },
+        "contacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Contact"
+          },
+          "description": "Contacts engaged during the deal"
+        },
+        "call_transcripts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CallTranscript"
+          },
+          "description": "Call recordings/transcripts from the deal"
+        },
+        "email_threads": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EmailThread"
+          },
+          "description": "Email correspondence from the deal"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional context or CRM notes"
+        },
+        "product_evaluated": {
+          "type": "string",
+          "description": "Product/SKU the prospect was evaluating"
+        },
+        "discount_offered": {
+          "type": "number",
+          "description": "Discount percentage offered (if any)"
+        }
+      }
+    },
+    "Contact": {
+      "type": "object",
+      "required": ["name", "title"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["champion", "economic_buyer", "technical_buyer", "influencer", "blocker", "end_user", "unknown"],
+          "description": "Contact's role in the buying process"
+        },
+        "engagement_level": {
+          "type": "string",
+          "enum": ["high", "medium", "low", "none"],
+          "description": "Level of engagement during the deal"
+        },
+        "last_interaction_date": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "CallTranscript": {
+      "type": "object",
+      "required": ["date", "summary"],
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "duration_minutes": {
+          "type": "integer"
+        },
+        "attendees": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "summary": {
+          "type": "string",
+          "description": "Call summary or full transcript text"
+        },
+        "call_type": {
+          "type": "string",
+          "enum": ["discovery", "demo", "technical_review", "negotiation", "executive_briefing", "follow_up", "other"]
+        }
+      }
+    },
+    "EmailThread": {
+      "type": "object",
+      "required": ["subject"],
+      "properties": {
+        "subject": {
+          "type": "string"
+        },
+        "date_range": {
+          "type": "string",
+          "description": "Date range of email thread"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Summary or key excerpts from the email thread"
+        },
+        "participants": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}
